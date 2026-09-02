@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Abdullah – Fitness Command Center</title>
+  <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#080A0D">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root{
@@ -5345,6 +5347,13 @@ function showToast(msg,bg=''){
   t.className='toast'; if(bg) t.style.background=bg;
   t.textContent=msg; c.appendChild(t);
   setTimeout(()=>t.remove(),2800);
+}
+  if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("ASCENSION service worker registered"))
+      .catch(err => console.error("ASCENSION service worker failed:", err));
+  });
 }
 </script>
 </body>
