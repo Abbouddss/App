@@ -1,6 +1,6 @@
 {
-  "name": "ASCENSION — Fitness Command Center",
-  "short_name": "ASCENSION",
+  "name": "A-FIT",
+  "short_name": "A-FIT",
   "description": "Your personal fitness progression system.",
   "start_url": "./",
   "display": "standalone",
