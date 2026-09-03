@@ -7,6 +7,7 @@
   <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#080A0D">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg-page:#EDE2CD;
@@ -5355,6 +5356,15 @@ function showToast(msg,bg=''){
       .catch(err => console.error("ASCENSION service worker failed:", err));
   });
 }
+  const SUPABASE_URL = "https://yxelmksnahdzjuanrmkw.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_nUno5CtFZhsh4N7lbgfNfw_0k5yv8HS";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+console.log("A-FIT: Supabase connected");
 </script>
 </body>
 </html>
