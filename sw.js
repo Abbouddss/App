@@ -1,4 +1,5 @@
-const CACHE_NAME = "ascension-v2"; // bump this string any time you want to force everyone onto fresh files
+const CACHE_NAME = "ascension-v3"; // bump this string any time you want to force everyone onto fresh files
+
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,7 +8,24 @@ const APP_SHELL = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME).then(cache => {
+      // Cache each shell file independently instead of cache.addAll(),
+      // which fails the WHOLE install (forever, leaving any old service
+      // worker stuck in control) if even one file 404s. This way a
+      // missing/renamed file just gets skipped instead of blocking
+      // every future update from ever taking effect.
+      return Promise.all(
+        APP_SHELL.map(url =>
+          fetch(url)
+            .then(response => {
+              if (response.ok) return cache.put(url, response);
+            })
+            .catch(() => {
+              console.warn("A-FIT service worker: couldn't precache", url);
+            })
+        )
+      );
+    })
   );
   self.skipWaiting();
 });
@@ -34,7 +52,7 @@ self.addEventListener("fetch", event => {
   // whatever was last cached, so the app still opens offline.
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: "no-store" })
         .then(response => {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
